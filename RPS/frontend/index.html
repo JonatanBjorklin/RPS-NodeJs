@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock-Paper-Scissors</title>
+</head>
+<body>
+  <h1>Rock-Paper-Scissors</h1>
+  <form action="/" method="post" onsubmit="return playRPS()">
+    <label>
+      <input type="radio" name="move" value="rock"> Rock
+    </label>
+    <label>
+      <input type="radio" name="move" value="paper"> Paper
+    </label>
+    <label>
+      <input type="radio" name="move" value="scissors"> Scissors
+    </label>
+    <button type="submit">Submit</button>
+  </form>
+  <p id="result"></p>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+  
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+  
+      const selectedMove = document.querySelector('input[name="move"]:checked');
+  
+      if (!selectedMove) {
+        alert("Please select a move.");
+        return;
+      }
+  
+      const moveValue = selectedMove.value;
+  
+      fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `move=${moveValue}`,
+      })
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('result').textContent = data;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').textContent = 'Error communicating with the server.';
+        });
+    });
+  });  
+</script>
+</body>
+</html>
